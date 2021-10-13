@@ -94,51 +94,80 @@ module.exports = class BinarySearchTree {
       }
     }
 
-    function delFunc(node, d) {
-      if (d < node.data) {
-        delFunc(node.left, d);
-      } else if (d > node.data) {
-        delFunc(node.right, d);
-      } else if (node.left != null && node.right != null) {
-        node.data = minFunc(node.right);
-        node.right = delFunc(node.right, node.data);
+    function delFunc(parNode, d) {
+      let child;
+      if (d < parNode.data) {
+        child = parNode.left;
       } else {
-        if (node.left != null) {
-          node = node.left;
-        }
-        else if (node.right != null) {
-          node = node.right;
-        }
-        else {
-          node = null;
-        }
-          
+        child = parNode.right;
       }
-      return node;
+      if (d == child.data) {
+        if (child.left != null && child.right != null) {
+          child.data = minFunc(child.right);
+          delFunc(child, child.data);
+        } else {
+          if (child.left != null) {
+            if (d < parNode.data) {
+              parNode.left = child.left;
+            } else {
+              parNode.right = child.left;
+            }
+          } else if (child.right != null) {
+            if (d < parNode.data) {
+              parNode.left = child.right;
+            } else {
+              parNode.right = child.right;
+            }
+          } else {
+            if (d < parNode.data) {
+              parNode.left = null;
+            } else {
+              parNode.right = null;
+            }
+          }
+        }
+      } else {
+        delFunc(child, d);
+      }
     }
+  if (d == this.r.data) {
+    if (this.r.left != null && this.r.right != null) {
+      this.r.data = minFunc(this.r.right);
+      delFunc(this.r, this.r.data);
+    } else {
+      if (this.r.left != null) {
+        this.r = this.r.left;
+      } else if (this.r.right != null) {
+        this.r = this.r.right;
+      } else {
+        this.r = null;
+      }
+    }
+  } else {
     delFunc(this.r, d);
   }
+}
 
-  min() {
-    function minFunc(node) {
-      if (node.left === null) {
-        return node.data;
-      } else {
-        return minFunc(node.left);
-      }
+min() {
+  function minFunc(node) {
+    if (node.left === null) {
+      return node.data;
+    } else {
+      return minFunc(node.left);
     }
-    return minFunc(this.r);
   }
+  return minFunc(this.r);
+}
 
-  max() {
-    function maxFunc(node) {
-      if (node.right === null) {
-        return node.data;
-      } else {
-        return maxFunc(node.right);
-      }
+max() {
+  function maxFunc(node) {
+    if (node.right === null) {
+      return node.data;
+    } else {
+      return maxFunc(node.right);
     }
-    return maxFunc(this.r);
   }
+  return maxFunc(this.r);
+}
 
 }
